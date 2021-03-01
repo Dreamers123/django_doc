@@ -10,7 +10,8 @@ class Musician(models.Model):
     last_name = models.CharField(max_length=50)
     instrument = models.CharField(max_length=100)
     shirt_size = models.CharField(max_length=1, choices=SHIRT_SIZES)
-
+    def __str__(self):
+        return self.first_name
 
 class Album(models.Model):
     artist = models.ForeignKey(Musician, on_delete=models.CASCADE)

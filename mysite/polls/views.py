@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
 import requests
 from rest_framework import status
 from rest_framework.response import Response
@@ -21,13 +22,17 @@ def api_details(request, id):
     data = r.json()
     return Response(data, status=status.HTTP_200_OK)
 
-# @api_view(['POST'])
-# def api_post(request):
-#     if request.method == "POST":
-#             url = 'http://jsonplaceholder.typicode.com/users/'
-#             payload = {'name':'Abeer'}
-#             response = requests.post(url, data = payload)
-#             return Response(response.json(), status=status.HTTP_200_OK)
-#
-#     else:
-#         return Response({"error": "Method not allowed"}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+def api_post(request):
+    if request.method == "POST":
+            url = 'http://jsonplaceholder.typicode.com/users/'
+            payload = {'name':'Abeer'}
+            response = requests.post(url, data = payload)
+            return Response(response.json(), status=status.HTTP_200_OK)
+
+    else:
+        return Response({"error": "Method not allowed"}, status=status.HTTP_400_BAD_REQUEST)
+def permission_denied_view(request):
+    raise PermissionDenied
+def response_error_handler(request, exception=None):
+    return HttpResponse('Error handler content', status=403)

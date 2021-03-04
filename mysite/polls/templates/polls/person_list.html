@@ -1,0 +1,10 @@
+<div style="text-align:center;">
+<h1>Persons</h1>
+<ul>
+{% for preson in object_list %}
+    <li style="list-style-type:none;"><h4>{{ preson.name }} - {{ now|date }}</h4> </li>
+{% empty %}
+    <li>No Person There</li>
+{% endfor %}
+</ul>
+</div>

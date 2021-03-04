@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 class Musician(models.Model):
     SHIRT_SIZES = (
@@ -54,6 +55,12 @@ class Person(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('person-detail', kwargs={'pk': self.pk})
+
+    class Meta:
+        ordering = ['-id']
 
 class Group(models.Model):
     name = models.CharField(max_length=128)

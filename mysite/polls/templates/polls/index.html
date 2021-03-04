@@ -1,0 +1,17 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Make me a Django middleware</title>
+</head>
+<body>
+<div id="root">
+<h1>All Available Data</h1>
+
+<p>First Name: {{first_name }}</p>
+<p>Last Name: {{last_name }}</p>
+<p>Address: {{address}}</p>
+
+</div>
+</body>
+{{ translations|json_script:"translations" }}

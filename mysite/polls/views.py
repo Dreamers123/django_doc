@@ -5,9 +5,71 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+from django.utils import timezone
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+from .models import Musician,Person
+from .forms import ContactForm
+from django.views.generic.edit import FormView,CreateView,UpdateView,DeleteView
+from django.urls import reverse_lazy
+from django.template.response import TemplateResponse
+from django.shortcuts import render
 
+class PersonCreate(CreateView):
+    model = Person
+    fields = ['name']
+    #template_name = 'polls/contact.html'
+
+class PersonDelete(DeleteView):
+    model = Person
+    success_url = reverse_lazy('person-list')
+
+class ContactView(FormView):
+    template_name = 'polls/contact.html'
+    form_class = ContactForm
+    success_url = '/1/amp'
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.send_email()
+        return super().form_valid(form)
+
+class PersonUpdate(UpdateView):
+    model = Person
+    fields = ['name']
+    template_name_suffix = '_update_form'
+
+class MusicianDetailView(DetailView):
+
+    model = Person
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+    template_name = 'polls/musician_detail.html'
+class PersonListView(ListView):
+
+    model = Person
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+    template_name = 'polls/person_list.html'
 def index(request):
-    return HttpResponse("<h3 style='color:red;text-align:center'>Hello, world. You're at the polls index.</h3>")
+    context = {
+        "first_name": "Anjaneyulu",
+        "last_name": "Batta",
+        "address": "Hyderabad, India"
+    }
+    #return TemplateResponse(request, "polls/index.html", context)
+
+    return render(request, "polls/index.html", context)
 @api_view(('GET',))
 #@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def api_index(request):
